@@ -14,21 +14,28 @@ class ViewController: UIViewController {
     
     private var isFinishedTyping = true
     
+    private var displayValue: Double {
+        get {
+            guard let number = Double(displayLabel.text!) else {
+                fatalError("Failed to convert display label text to Double, possibly because it contains non-numerical characters")
+            }
+            return number
+        }
+        set {
+            displayLabel.text = String(newValue)
+        }
+    }
+    
     @IBAction func calcButtonPressed(_ sender: UIButton) {
         isFinishedTyping = true
         
-        guard let number = Double(displayLabel.text!) else {
-            fatalError("Failed to convert display label text to Double, possibly because it contains non-numerical characters")
-        }
-
-        
         if let calcMethod = sender.currentTitle {
             if calcMethod == "+/-" {
-                displayLabel.text = String(number * -1)
+                displayValue *= -1
             } else if calcMethod == "AC" {
-                displayLabel.text = "0"
+                displayValue = 0
             } else if calcMethod == "%" {
-                displayLabel.text = String(number / 100)
+                displayValue /= 100
             }
         }
         
@@ -64,7 +71,6 @@ class ViewController: UIViewController {
     }
     
     @IBAction func numButtonPressed(_ sender: UIButton) {
-        
         // Note: numValue includes the "." symbol
         if let numValue = sender.currentTitle {
             
@@ -73,12 +79,8 @@ class ViewController: UIViewController {
                 isFinishedTyping = false
             } else {
                 if numValue == "." {
-                    
-                    guard let currentDisplayValue = Double(displayLabel.text!) else {
-                        fatalError("Failed to convert display label text to Double, possibly because it contains non-numerical characters")
-                    }
                     // Quick way to initialize boolean
-                    let isInt = (floor(currentDisplayValue) == currentDisplayValue)
+                    let isInt = (floor(displayValue) == displayValue)
                     
                     if !isInt {
                         return
