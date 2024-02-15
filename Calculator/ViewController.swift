@@ -14,6 +14,8 @@ class ViewController: UIViewController {
     
     private var isFinishedTyping = true
     
+    private var calculatorLogic = CalculatorLogic()
+    
     private var displayValue: Double {
         get {
             guard let number = Double(displayLabel.text!) else {
@@ -25,12 +27,13 @@ class ViewController: UIViewController {
             displayLabel.text = String(newValue)
         }
     }
-    
+
     @IBAction func calcButtonPressed(_ sender: UIButton) {
         isFinishedTyping = true
         
+        calculatorLogic.setNumber(displayValue)
+        
         if let calcSymbol = sender.currentTitle {
-            let calculatorLogic = CalculatorLogic(number: displayValue)
             
             guard let result = calculatorLogic.calcResult(symbol: calcSymbol) else {
                 fatalError("The result of the calculation is nil")
@@ -38,36 +41,6 @@ class ViewController: UIViewController {
             
             displayValue = result
         }
-        
-        
-//        var number: Float {
-//            get   {
-//                var tempNumber: Float = 0.0
-//                if let pressedButton = sender.currentTitle {
-//                    switch pressedButton {
-//                    case "AC":
-//                        tempNumber = 0
-//                    case "+/-":
-////                        let x = 5.2
-////                        let y = Int(x)
-////                        print(y)
-//                        print(displayLabel.text!)
-//                        let displayLabelFloat = Float(displayLabel.text!)!
-//                        let displayLabelFloatInt = Int(displayLabelFloat)
-//                        let displayLabelFloatIntFloat = Float(displayLabelFloat)
-//                        tempNumber = -displayLabelFloat
-//                    case "%":
-//                        tempNumber = Float(displayLabel.text!)! / 100
-//                    default:
-//                        tempNumber = 0
-//                    }
-//                }
-//                return tempNumber
-//            }
-//
-//        }
-//        displayLabel.text = "\(number)"
-        
     }
     
     @IBAction func numButtonPressed(_ sender: UIButton) {

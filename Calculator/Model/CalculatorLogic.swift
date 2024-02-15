@@ -8,24 +8,27 @@
 
 import Foundation
 
-class CalculatorLogic {
+struct CalculatorLogic {
     
-    var number: Double
+    private var number: Double?
     
-    init(number: Double) {
+    mutating func setNumber(_ number: Double) {
         self.number = number
     }
     
     func calcResult(symbol: String) -> Double? { // TODO: Implement a better solution than returning an optional value
-        switch symbol {
-        case "+/-":
-            return number * -1
-        case "AC":
-            return 0
-        case "%":
-            return number / 100
-        default:
-            return nil
+        if let safeNumber = number {
+            switch symbol {
+            case "+/-":
+                return safeNumber * -1
+            case "AC":
+                return 0
+            case "%":
+                return safeNumber / 100
+            default:
+                return nil
+            }
         }
+        return nil
     }
 }
