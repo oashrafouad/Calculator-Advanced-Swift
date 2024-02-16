@@ -12,11 +12,13 @@ struct CalculatorLogic {
     
     private var number: Double?
     
+    private var intermediateCalculation: (n1: Double, calcSymbol: String)?
+    
     mutating func setNumber(_ number: Double) {
         self.number = number
     }
     
-    func calcResult(symbol: String) -> Double? { // TODO: Implement a better solution than returning an optional value
+    mutating func calcResult(symbol: String) -> Double? { // TODO: Implement a better solution than returning an optional value
         if let safeNumber = number {
             switch symbol {
             case "+/-":
@@ -25,8 +27,28 @@ struct CalculatorLogic {
                 return 0
             case "%":
                 return safeNumber / 100
+            case "=":
+                return performTwoNumCalculation(n2: safeNumber)
+            default: // +, -, ×, ÷
+                intermediateCalculation = (n1: safeNumber, calcSymbol: symbol)
+            }
+        }
+        return nil
+    }
+    
+    private func performTwoNumCalculation(n2: Double) -> Double? {
+        if let n1 = intermediateCalculation?.n1, let calcSymbol = intermediateCalculation?.calcSymbol {
+            switch calcSymbol {
+            case "+":
+                return n1 + n2
+            case "-":
+                return n1 - n2
+            case "×":
+                return n1 * n2
+            case "÷":
+                return n1 / n2
             default:
-                return nil
+                fatalError("Unexpected calcSymbol")
             }
         }
         return nil

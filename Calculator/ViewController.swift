@@ -13,9 +13,7 @@ class ViewController: UIViewController {
     @IBOutlet weak var displayLabel: UILabel!
     
     private var isFinishedTyping = true
-    
     private var calculatorLogic = CalculatorLogic()
-    
     private var displayValue: Double {
         get {
             guard let number = Double(displayLabel.text!) else {
@@ -34,19 +32,15 @@ class ViewController: UIViewController {
         calculatorLogic.setNumber(displayValue)
         
         if let calcSymbol = sender.currentTitle {
-            
-            guard let result = calculatorLogic.calcResult(symbol: calcSymbol) else {
-                fatalError("The result of the calculation is nil")
+            if let result = calculatorLogic.calcResult(symbol: calcSymbol) {
+                displayValue = result
             }
-            
-            displayValue = result
         }
     }
     
     @IBAction func numButtonPressed(_ sender: UIButton) {
         // Note: numValue includes the "." symbol
         if let numValue = sender.currentTitle {
-            
             if isFinishedTyping {
                 displayLabel.text = numValue
                 isFinishedTyping = false
@@ -54,12 +48,10 @@ class ViewController: UIViewController {
                 if numValue == "." {
                     // Quick way to initialize boolean
                     let isInt = (floor(displayValue) == displayValue)
-                    
                     if !isInt {
                         return
                     }
                 }
-                
                 displayLabel.text! += numValue
             }
         }
